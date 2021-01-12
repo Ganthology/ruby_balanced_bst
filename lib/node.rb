@@ -4,8 +4,8 @@ class Node
 
   def initialize(data = nil)
     @data = data
-    @left = left
-    @right = right
+    @left = nil
+    @right = nil
   end
 
   def <=>(other)
