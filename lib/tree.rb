@@ -19,10 +19,29 @@ class Tree
     root
   end
 
+  def insert(value)
+    @root = insert_nodes(@root, value)
+  end
 
+  def insert_nodes(root, value)
+    return nil if value.nil?
+
+    if root.nil?
+      root = Node.new(value)
+    elsif value > root
+      root.right = insert_nodes(root.right, value)
+    elsif value < root
+      root.left = insert_nodes(root.left, value)
+    end
+    root
+  end
+
+  def delete(value)
+    
+  end
 end
 
-tree = Tree.new([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324])
+tree = Tree.new([1, 2, 3])
 p tree.root.data
-p tree.root.left.data
+p tree.root.left.left
 p tree.root.right.data
