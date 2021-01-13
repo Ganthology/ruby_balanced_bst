@@ -45,10 +45,40 @@ class Tree
 
     if value > root
       root.right = delete_nodes(root.right, value)
-    else
+    elsif value < root
       root.left = delete_nodes(root.left, value)
+    else
+      return root.right if root.left.nil?
+      return root.left if root.right.nil?
+
+      root.data = smallest_value(root.right)
+      root.right = delete_nodes(root.right, root.data)
     end
     root
+  end
+
+  def smallest_value(root)
+    smallest = root.data
+    until root.left.nil?
+      smallest = root.left.key
+      root = root.left
+    end
+    smallest
+  end
+
+  def find(value)
+    current_node = @root
+    until current_node.nil? 
+      return current_node if current_node.data == value
+
+      current_node = value > current_node.data ? current_node.right : current_node.left
+      # if value > current_node.data
+      #   current_node = current_node.right
+      # else
+      #   current_node = current_node.left
+      # end
+    end
+    current_node
   end
 end
 
