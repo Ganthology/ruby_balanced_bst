@@ -4,18 +4,17 @@ class Tree
   attr_accessor :root
 
   def initialize(array)
-    @root = build_tree(array)
+    @root = build_tree(array.uniq.sort)
   end
 
   def build_tree(array)
-    array = array.uniq.sort
-    # base case array is empty
-    mid = array.length / 2
-    root = Node.new(array[mid])
-    return root if mid.zero?
+    return nil if array.empty?
 
+    # base case array is empty
+    mid = (array.length - 1) / 2
+    root = Node.new(array[mid])
     root.left = build_tree(array[0...mid])
-    root.right = build_tree(array[mid..array.length])
+    root.right = build_tree(array[(mid + 1)..-1])
     root
   end
 
@@ -94,8 +93,8 @@ class Tree
   end
 end
 
-tree = Tree.new([1, 2, 3])
+tree = Tree.new([1, 2, 3, 4, 5, 6, 7, 8, 9 , 10, 11])
 # p tree.root.data
 # p tree.root.left.left
 # p tree.root.right.data
-tree.level_order
+p tree.level_order
