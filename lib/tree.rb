@@ -136,6 +136,14 @@ class Tree
     left_height > right_height ? left_height + 1 : right_height + 1
   end
 
+  def depth(node = @root)
+    return 0 if node == @root || node.nil?
+
+    left_depth = depth(node.left)
+    right_depth = depth(node.right)
+    left_depth > right_depth ? left_depth + 1 : right_depth + 1
+  end
+
   def preorder(root = @root)
     # root > left > right
     return if root.nil?
@@ -171,3 +179,7 @@ tree = Tree.new([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12])
 p tree.preorder
 p tree.inorder
 p tree.postorder
+
+p tree.height
+p tree.depth
+p tree.depth(tree.root.right.right)
