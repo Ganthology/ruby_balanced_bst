@@ -12,23 +12,31 @@ class Tree
 
     # base case array is empty
     mid = (array.length - 1) / 2
+    # root is the middle node
     root = Node.new(array[mid])
+    # left tree is index 0 to index mid - 1
     root.left = build_tree(array[0...mid])
+    # right tree is index mid + 1 to last index
     root.right = build_tree(array[(mid + 1)..-1])
     root
   end
 
+  # call the recursive insert method
   def insert(value)
     @root = insert_nodes(@root, value)
   end
 
+  # insert node and replace remaining nodes recursively
   def insert_nodes(root, value)
     return nil if value.nil?
 
+    # if the node is empty, insert node with new node
     if root.nil?
       root = Node.new(value)
+    # if value is larger, check right node
     elsif value > root
       root.right = insert_nodes(root.right, value)
+    # if value is smaller, check left node
     elsif value < root
       root.left = insert_nodes(root.left, value)
     end
@@ -36,26 +44,34 @@ class Tree
   end
 
   def delete(value)
+    # call the recursive delete method
     @root = delete_nodes(@root, value)
   end
 
+  # delete nodes and replace the remaining nodes recursively
   def delete_nodes(root, value)
     return nil if root.nil?
 
+    # if the value is larger than current node, check right
     if value > root
       root.right = delete_nodes(root.right, value)
+    # if value is smaller, check left
     elsif value < root
       root.left = delete_nodes(root.left, value)
+    # when the value is equal, the node is found
     else
+      # replace with left or right node if only one child
       return root.right if root.left.nil?
       return root.left if root.right.nil?
 
+      # the child node with smallest value replace the deleted node
       root.data = smallest_value(root.right)
       root.right = delete_nodes(root.right, root.data)
     end
     root
   end
 
+  # return the smallest value of a node, check if left node is nil
   def smallest_value(root)
     smallest = root.data
     until root.left.nil?
@@ -65,36 +81,66 @@ class Tree
     smallest
   end
 
+  # return the node containing the value
   def find(value)
     current_node = @root
-    until current_node.nil? 
+    until current_node.nil?
       return current_node if current_node.data == value
 
       current_node = value > current_node.data ? current_node.right : current_node.left
-      # if value > current_node.data
-      #   current_node = current_node.right
-      # else
-      #   current_node = current_node.left
-      # end
     end
     current_node
   end
 
+  # level order traversal using iterator
   def level_order
     array = []
     queue = []
     queue << @root
-    until queue.empty? 
+    until queue.empty?
       queue.push(queue.first.left) unless queue.first.left.nil?
       queue.push(queue.first.right) unless queue.first.right.nil?
-      array << queue.shift.data 
+      array << queue.shift.data
     end
     array
   end
+
+  # level order traversal using recursion
+  def level_order_rec
+    height = height(@root)
+    array = []
+    1.upto(height) { |i| array << print_given_level(@root, i) }
+    array.flatten.reject(&:nil?)
+  end
+
+  # print the nodes at the same level, starts from 1
+  def print_given_level(root, level)
+    return if root.nil?
+
+    array = []
+
+    if level == 1
+      array << root.data
+    elsif level > 1
+      array << print_given_level(root.left, level - 1)
+      array << print_given_level(root.right, level - 1)
+    end
+  end
+
+  # return the height of the tree if given @root
+  def height(node)
+    return 0 if node.nil?
+
+    left_height = height(node.left)
+    right_height = height(node.right)
+    left_height > right_height ? left_height + 1 : right_height + 1
+  end
 end
 
-tree = Tree.new([1, 2, 3, 4, 5, 6, 7, 8, 9 , 10, 11])
+tree = Tree.new([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11])
 # p tree.root.data
 # p tree.root.left.left
 # p tree.root.right.data
 p tree.level_order
+p tree.level_order_rec
+p tree.print_given_level(tree.root, 4)
