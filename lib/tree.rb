@@ -128,19 +128,46 @@ class Tree
   end
 
   # return the height of the tree if given @root
-  def height(node)
+  def height(node = @root)
     return 0 if node.nil?
 
     left_height = height(node.left)
     right_height = height(node.right)
     left_height > right_height ? left_height + 1 : right_height + 1
   end
+
+  def preorder(root = @root)
+    # root > left > right
+    return if root.nil?
+
+    array = [root.data] << preorder(root.left) << preorder(root.right)
+    array.flatten.reject(&:nil?)
+  end
+
+  def inorder(root = @root)
+    # left > root > right
+    return if root.nil?
+
+    array = [inorder(root.left)] << [root.data] << inorder(root.right)
+    array.flatten.reject(&:nil?)
+  end
+
+  def postorder(root = @root)
+    # left > right > root
+    return if root.nil?
+
+    array = [postorder(root.left)] << postorder(root.right) << [root.data]
+    array.flatten.reject(&:nil?)
+  end
 end
 
-tree = Tree.new([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11])
+tree = Tree.new([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12])
 # p tree.root.data
 # p tree.root.left.left
 # p tree.root.right.data
-p tree.level_order
-p tree.level_order_rec
-p tree.print_given_level(tree.root, 4)
+# p tree.level_order
+# p tree.level_order_rec
+# p tree.print_given_level(tree.root, 4)
+p tree.preorder
+p tree.inorder
+p tree.postorder
