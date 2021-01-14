@@ -80,9 +80,22 @@ class Tree
     end
     current_node
   end
+
+  def level_order
+    array = []
+    queue = []
+    queue << @root
+    until queue.empty? 
+      queue.push(queue.first.left) unless queue.first.left.nil?
+      queue.push(queue.first.right) unless queue.first.right.nil?
+      array << queue.shift.data 
+    end
+    array
+  end
 end
 
 tree = Tree.new([1, 2, 3])
-p tree.root.data
-p tree.root.left.left
-p tree.root.right.data
+# p tree.root.data
+# p tree.root.left.left
+# p tree.root.right.data
+tree.level_order
