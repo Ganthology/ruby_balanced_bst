@@ -34,10 +34,10 @@ class Tree
     if root.nil?
       root = Node.new(value)
     # if value is larger, check right node
-    elsif value > root
+    elsif value > root.data
       root.right = insert_nodes(root.right, value)
     # if value is smaller, check left node
-    elsif value < root
+    elsif value < root.data
       root.left = insert_nodes(root.left, value)
     end
     root
@@ -53,10 +53,10 @@ class Tree
     return nil if root.nil?
 
     # if the value is larger than current node, check right
-    if value > root
+    if value > root.data
       root.right = delete_nodes(root.right, value)
     # if value is smaller, check left
-    elsif value < root
+    elsif value < root.data
       root.left = delete_nodes(root.left, value)
     # when the value is equal, the node is found
     else
@@ -72,7 +72,7 @@ class Tree
   end
 
   # return the smallest value of a node, check if left node is nil
-  def smallest_value(root)
+  def smallest_value(root = @root)
     smallest = root.data
     until root.left.nil?
       smallest = root.left.key
@@ -167,6 +167,15 @@ class Tree
     array = [postorder(root.left)] << postorder(root.right) << [root.data]
     array.flatten.reject(&:nil?)
   end
+
+  def balanced?(root = @root)
+    # difference between heights not more than 1
+    return true if root.nil?
+
+    return true if ((height(root.left) - height(root.right)).abs <= 1) && balanced?(root.left) && balanced?(root.right)
+
+    false
+  end
 end
 
 tree = Tree.new([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12])
@@ -183,3 +192,8 @@ p tree.postorder
 p tree.height
 p tree.depth
 p tree.depth(tree.root.right.right)
+p tree.balanced?
+tree.insert(20)
+tree.insert(22)
+p tree.inorder
+p tree.balanced?
