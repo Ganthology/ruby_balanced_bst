@@ -176,6 +176,13 @@ class Tree
 
     false
   end
+
+  def rebalance
+    return inorder if balanced?
+
+    array = inorder
+    @root = build_tree(array)
+  end
 end
 
 tree = Tree.new([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12])
@@ -195,5 +202,8 @@ p tree.depth(tree.root.right.right)
 p tree.balanced?
 tree.insert(20)
 tree.insert(22)
-p tree.inorder
+p tree.preorder
+p tree.balanced?
+tree.rebalance
+p tree.preorder
 p tree.balanced?
