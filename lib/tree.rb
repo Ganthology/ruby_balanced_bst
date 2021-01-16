@@ -1,4 +1,4 @@
-require_relative './node'
+require_relative 'node'
 
 class Tree
   attr_accessor :root
@@ -183,27 +183,10 @@ class Tree
     array = inorder
     @root = build_tree(array)
   end
+
+  def pretty_print(node = @root, prefix = '', is_left = true)
+    pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
+    puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
+    pretty_print(node.left, "#{prefix}#{is_left ? '    ' : '│   '}", true) if node.left
+  end
 end
-
-tree = Tree.new([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12])
-# p tree.root.data
-# p tree.root.left.left
-# p tree.root.right.data
-# p tree.level_order
-# p tree.level_order_rec
-# p tree.print_given_level(tree.root, 4)
-p tree.preorder
-p tree.inorder
-p tree.postorder
-
-p tree.height
-p tree.depth
-p tree.depth(tree.root.right.right)
-p tree.balanced?
-tree.insert(20)
-tree.insert(22)
-p tree.preorder
-p tree.balanced?
-tree.rebalance
-p tree.preorder
-p tree.balanced?
